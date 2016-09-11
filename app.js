@@ -4,6 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var firebase = require("firebase");
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -11,6 +12,28 @@ var numbers = require('./routes/number');
 
 var socketController = require('./sockets/socketController');
 var app = express();
+
+
+// Initialize Firebase
+var config = {
+  apiKey: "AIzaSyDVAzFNruUePIDKWACy5Acbsok4Cklrx9A",
+  authDomain: "smsdruid-590fa.firebaseapp.com",
+  databaseURL: "https://smsdruid-590fa.firebaseio.com",
+  storageBucket: "smsdruid-590fa.appspot.com",
+  serviceAccount : "serviceAccount.json" // this service account has "editor" role
+
+};
+firebase.initializeApp(config);
+
+var db = firebase.database();
+var ref = db.ref('/numbers');
+ref.once('value',function(numbers){
+  console.log(numbers.val());
+});
+function logSMS(){
+
+}
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -30,11 +53,15 @@ app.use('/numbers',numbers);
 
 
 app.post('/sms',function(req,res,next){
-  socketController.sendSMS(req.body);
+  socketController.sendSMS(req.body); // send the sms to the frontend
   console.log(req.body);
   res.send('ok');
 });
 
+app.get('/test',function(req,res){
+  console.log(req.query);
+  res.send('ok');
+})
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
