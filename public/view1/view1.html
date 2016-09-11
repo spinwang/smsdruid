@@ -1,9 +1,16 @@
 
-<p>The SMS received by Number 1</p>
+<h2>Available numbers</h2>
 
 
-<div ng-repeat="(key, value) in ctrl.sms">
-        {{key}} : {{value.name}}
+<div ng-repeat="(key, value) in ctrl.numbers">
+    {{key}} : {{value.name}}
+</div>
+
+<br>
+<h2>SMS</h2>
+<div ng-repeat="(key, value) in ctrl.msgs">
+        <p>From: {{value.From}} <br>
+        Msg Body:{{value.Body}}</p>
 </div>
 
 

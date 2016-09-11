@@ -4,35 +4,13 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var firebase = require("firebase");
-
+var SMS = require('./models/sms');
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var numbers = require('./routes/number');
 
 var socketController = require('./sockets/socketController');
 var app = express();
-
-
-// Initialize Firebase
-var config = {
-  apiKey: "AIzaSyDVAzFNruUePIDKWACy5Acbsok4Cklrx9A",
-  authDomain: "smsdruid-590fa.firebaseapp.com",
-  databaseURL: "https://smsdruid-590fa.firebaseio.com",
-  storageBucket: "smsdruid-590fa.appspot.com",
-  serviceAccount : "serviceAccount.json" // this service account has "editor" role
-
-};
-firebase.initializeApp(config);
-
-var db = firebase.database();
-var ref = db.ref('/numbers');
-ref.once('value',function(numbers){
-  console.log(numbers.val());
-});
-function logSMS(){
-
-}
 
 
 // view engine setup
@@ -52,9 +30,13 @@ app.use('/users', users);
 app.use('/numbers',numbers);
 
 
+var sms = new SMS('1');
 app.post('/sms',function(req,res,next){
-  socketController.sendSMS(req.body); // send the sms to the frontend
+  //socketController.sendSMS(req.body); // send the sms to the frontend
+  var sms = new SMS(req.body);
   console.log(req.body);
+  sms.logSMS();
+
   res.send('ok');
 });
 
@@ -77,6 +59,8 @@ app.use(function(req, res, next) {
 if (app.get('env') === 'development') {
   app.use(function(err, req, res, next) {
     console.log(err);
+
+    console.log(err.stack);
     res.status(err.status || 500);
     res.render('error', {
       message: err.message,
@@ -88,7 +72,8 @@ if (app.get('env') === 'development') {
 // production error handler
 // no stacktraces leaked to user
 app.use(function(err, req, res, next) {
-  console.log(err);
+  console.log(err)
+  console.log(err.stack);
   res.status(err.status || 500);
   res.render('error', {
     message: err.message,

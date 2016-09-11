@@ -5,11 +5,10 @@
  */
 
 var app = require('../app');
+
 var debug = require('debug')('untitled:server');
 var http = require('http');
 var io = require('socket.io');
-var cp = require('child_process');
-var Q  = require('q');
 
 
 var socketController = require('../sockets/socketController');
@@ -27,50 +26,6 @@ app.set('port', port);
 var server = http.createServer(app);
 var io = require('socket.io')(server);
 socketController(io);
-
-var getTmateSshPathCmd = "tmate -S /tmp/tmate.sock display -p \'#{tmate_ssh}\'";
-var startTmateCmd = "tmate -S /tmp/tmate.sock new-session -d && tmate -S /tmp/tmate.sock wait tmate-ready";
-var stopTmateCmd = "tmate -S /tmp/tmate.sock kill-session";
-var runCmd = Q.nfbind(cp.exec);
-
-// start tmate
-function startTmate() {
-
-  return runCmd(getTmateSshPathCmd) // try to get existing tmate ssh path
-      .catch(function () {  // if fail, start tmate
-        return runCmd(startTmateCmd);
-      })
-      .then(function () { // try to get the tmate ssh path again
-        return runCmd(getTmateSshPathCmd);
-      })
-      .then(function(std){ // [ 'ssh LZwcQRQRsIhhfg3RR31qSeKU6@ny2.tmate.io\n', '' ]
-        return std[0];     // return the first element
-      })
-}
-
-// stop tmate
-function stopTmate(){
-  return runCmd(stopTmateCmd)
-      .then(function(){
-        return 'debug mode stopped successfully';
-      })
-      .catch(function(err){
-        return 'debug mode is already stopped';
-      })
-}
-
-
-io.on('connection', function (socket) {
-  socket.on('debug-start',function(data,cb){
-    startTmate().then(cb);
-  });
-  socket.on('debug-stop',function(data,cb){
-    stopTmate().then(cb);
-  });
-  console.log('socket connection');
-});
-
-
 
 /**
  * Listen on provided port, on all network interfaces.
