@@ -9,8 +9,11 @@
 <br>
 <h2>SMS</h2>
 <div ng-repeat="(key, value) in ctrl.msgs">
-        <p>From: {{value.From}} <br>
-        Msg Body:{{value.Body}}</p>
+        <p>
+            From: {{value.From}}
+            <br>
+            Msg Body:<span ng-bind-html="value.Body"></span>
+        </p>
 </div>
 
 

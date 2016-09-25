@@ -3,7 +3,8 @@
 // Declare app level module which depends on views, and components
 angular.module('myApp', [
   'ngRoute',
-  'smsdruid.numbers',
+  'ngSanitize',
+  'smsdruid.numbers'
 
 ]).
 config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
