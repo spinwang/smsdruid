@@ -9,7 +9,7 @@ var routes = require('./routes/index');
 var users = require('./routes/users');
 var numbers = require('./routes/number');
 
-var socketController = require('./sockets/socketController');
+
 var app = express();
 
 
@@ -17,8 +17,6 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-// uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -29,21 +27,13 @@ app.use('/', routes);
 app.use('/users', users);
 app.use('/numbers',numbers);
 
-
-var sms = new SMS('1');
 app.post('/sms',function(req,res,next){
-  //socketController.sendSMS(req.body); // send the sms to the frontend
   var sms = new SMS(req.body);
   console.log(req.body);
   sms.logSMS();
 
   res.send('ok');
 });
-
-app.get('/test',function(req,res){
-  console.log(req.query);
-  res.send('ok');
-})
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

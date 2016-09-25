@@ -3,10 +3,9 @@
 // Declare app level module which depends on views, and components
 angular.module('myApp', [
   'ngRoute',
-  'myApp.view1',
-  'btford.socket-io',
+  'smsdruid.numbers',
 
 ]).
 config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
-  $routeProvider.otherwise({redirectTo: '/msg'});
+  $routeProvider.otherwise({redirectTo: '/numbers'});
 }])

@@ -23,18 +23,16 @@ function logSMS(){
 }
 
 /**
- *
- * @param {obj}
- * @returns {obj}
+ * Represents an SMS object
+ * @param {obj} msg - An object with detailed information about the sms received
+ * @returns {obj} SMS - An object that represents the received sms
  * @constructor
  */
-function SMS(sms){
-    var sms= {
-        sms    : sms,
+function SMS(msg){
+    return {
+        sms    : msg,
         logSMS : logSMS,
-
     };
-    return sms;
 }
 
 module.exports = SMS;
