@@ -8,6 +8,9 @@ WORKDIR /usr/src/app
 COPY package.json /usr/src/app/
 RUN npm install
 
+# Install Nodemon
+RUN npm install -g nodemon
+
 # Bundle app source
 COPY . /usr/src/app
 

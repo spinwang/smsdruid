@@ -4,7 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var SMS = require('./models/sms');
+var Msg = require('./models/Msg');
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var numbers = require('./routes/number');
@@ -27,10 +27,10 @@ app.use('/', routes);
 app.use('/users', users);
 app.use('/numbers',numbers);
 
-app.post('/sms',function(req,res,next){
-  var sms = new SMS(req.body);
+app.post('/msg',function(req,res,next){
+  var msg = new Msg(req.body);
   console.log(req.body);
-  sms.logSMS();
+  msg.logMsg();
 
   res.send('ok');
 });

@@ -26,7 +26,7 @@ angular.module('smsdruid.numbers', ['ngRoute'])
       firebase.initializeApp(config); // Initialize Firebase
       var database = firebase.database();
       var numbersRef = database.ref('/numbers');
-      var msgsRef = database.ref('/msgs').limitToFirst(20);
+      var msgsRef = database.ref('/msgs').limitToLast(10);
 
       // display all the numbers
       numbersRef.once('value').then(function(snapshot){
@@ -34,7 +34,7 @@ angular.module('smsdruid.numbers', ['ngRoute'])
         $scope.$apply();
       });
 
-      // show all the messages, up to the recent 20
+      // show all the messages
       msgsRef.on('child_added',function(snapshot){
         var value = snapshot.val();
         var key = snapshot.getKey();
