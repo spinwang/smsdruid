@@ -28,6 +28,35 @@ angular.module('smsdruid.numbers', ['ngRoute'])
       var numbersRef = database.ref('/numbers');
       var msgsRef = database.ref('/msgs').limitToLast(10);
 
+      self.signOut = function(){
+        // [START signout]
+        firebase.auth().signOut();
+        // [END signout]
+      };
+
+      firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+          // User is signed in.
+          var displayName = user.displayName;
+          var email = user.email;
+          var emailVerified = user.emailVerified;
+          var photoURL = user.photoURL;
+          var isAnonymous = user.isAnonymous;
+          var uid = user.uid;
+          var providerData = user.providerData;
+          // [START_EXCLUDE]
+          document.getElementById('quickstart-sign-in-status').textContent = 'Signed in';
+          document.getElementById('quickstart-sign-in').textContent = 'Sign out';
+          document.getElementById('quickstart-account-details').textContent = JSON.stringify(user, null, '  ');
+          // [END_EXCLUDE]
+          window.location.replace("/messages")
+
+        } else {
+          window.location.replace("/");
+        }
+
+      });
+
       // display all the numbers
       numbersRef.once('value').then(function(snapshot){
         self.numbers = snapshot.val();

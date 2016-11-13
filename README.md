@@ -11,11 +11,12 @@ npm start
 ```
 
 ## Design
-go to /slash login
+go to /login, if there is no user
+go to /#/numbers is there is a user
 
 ## Todo: 
 
-
+* remove the serviceAccount.json from the entire git history
 * Link docker to local file
 * Put ngrok in docker
 * Start ngrok by default
