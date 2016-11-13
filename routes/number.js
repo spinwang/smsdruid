@@ -5,7 +5,9 @@ var path = require('path');
 
 
 router.get('/', function(req, res, next) {
-  fs.readFileStream(path.join(__dirname,'../public/index.html')).pipe(res);
+  fs.createReadStream(path.join(__dirname,'../public/index.html')).pipe(res);
 });
+
+
 
 module.exports = router;

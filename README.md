@@ -1,6 +1,7 @@
 # SMSdruid
 
 To start the server: 
+
 ```
 npm install -g nodemon
 ./ngrok tcp --remote-addr 1.tcp.ngrok.io:20550 8080
@@ -9,8 +10,10 @@ npm start
 # then the server is available in localhost:8080
 ```
 
+## Design
+go to /slash login
 
-Todo: 
+## Todo: 
 
 
 * Link docker to local file
