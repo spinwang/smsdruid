@@ -1,30 +1,32 @@
 var db = require('../db/init').firebase.database();
-var _   = require('lodash');
+var _ = require('lodash');
 
 
 var msgRef = db.ref('/msgs');
 
-function logMsg(){
+function logMsg() {
     var msg = this.msg;
+    msg.time = new Date().getTime();
     // todo: time stamp to the msg obj
     return msgRef.push(msg).key; // this is equivalent to .push(msg).set()
 }
 
-//
 
-function getMsg(opts){
-    if (! _.isObject(opts)){ opts = {};}
+function getMsg(opts) {
+    if (!_.isObject(opts)) {
+        opts = {};
+    }
     opts.limit = opts.limit || 10; // default to 10 msg
 
-    var query =  msgRef.limitToLast(opts.limit);
-    return query.once('value').then(function(msgs){
+    var query = msgRef.limitToLast(opts.limit);
+    return query.once('value').then(function (msgs) {
         return msgs.val();
     })
 }
 
-function getLatestMsg(){
+function getLatestMsg() {
     var query = msgRef.limitToLast(1);
-    return query.once('value').then(function(msg){
+    return query.once('value').then(function (msg) {
         return msg.val();
     })
 }
@@ -35,12 +37,12 @@ function getLatestMsg(){
  * @returns {obj} Msg - An object that represents the received msg
  * @constructor
  */
-function Msg(msg){
+function Msg(msg) {
     return {
-        msg    : msg,
-        logMsg : logMsg,
-        getMsg : getMsg,
-        getLatestMsg : getLatestMsg
+        msg: msg,
+        logMsg: logMsg,
+        getMsg: getMsg,
+        getLatestMsg: getLatestMsg
     };
 }
 
