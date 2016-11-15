@@ -36,21 +36,7 @@ angular.module('smsdruid.numbers', ['ngRoute'])
 
       firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
-          // User is signed in.
-          var displayName = user.displayName;
-          var email = user.email;
-          var emailVerified = user.emailVerified;
-          var photoURL = user.photoURL;
-          var isAnonymous = user.isAnonymous;
-          var uid = user.uid;
-          var providerData = user.providerData;
-          // [START_EXCLUDE]
-          document.getElementById('quickstart-sign-in-status').textContent = 'Signed in';
-          document.getElementById('quickstart-sign-in').textContent = 'Sign out';
-          document.getElementById('quickstart-account-details').textContent = JSON.stringify(user, null, '  ');
-          // [END_EXCLUDE]
-          window.location.replace("/messages")
-
+          // do nothing, wait for messages to load if the user has the right permission to the database
         } else {
           window.location.replace("/");
         }
