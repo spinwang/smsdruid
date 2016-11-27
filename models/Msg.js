@@ -7,7 +7,6 @@ var msgRef = db.ref('/msgs');
 function logMsg() {
     var msg = this.msg;
     msg.time = new Date().getTime();
-    // todo: time stamp to the msg obj
     return msgRef.push(msg).key; // this is equivalent to .push(msg).set()
 }
 

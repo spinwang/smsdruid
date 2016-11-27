@@ -11,12 +11,28 @@
 
 <br>
 <h2>SMS</h2>
-
-<div ng-repeat="item in ctrl.arr">
-    <p>
-        From: {{item.From}}
-        <br>
-        Msg Body:<span ng-bind-html="item.Body"></span>
-    </p>
+<div class="row container-fluid">
+    <table ng-table="ctrl.tableParams" class="table table-condensed table-bordered table-striped">
+        <tr ng-repeat="msg in $data">
+            <td title="'From'">
+                {{msg.From}}
+            </td>
+            <td title="'Time'">
+                {{msg.time | date: 'medium'}}
+            </td>
+            <td title="'Body'" filter="{ Body: 'text'}" class="col-md-6">
+                <span ng-bind-html="msg.Body"></span>
+            </td>
+        </tr>
+    </table>
 </div>
+
+<!--<div ng-repeat="item in ctrl.msgs">
+    <p>
+        <b>Time</b>: {{item.time | date: 'medium'}}
+        <b>From</b>: {{item.From}}
+        <br>
+        <b>Msg Body</b></b>:<span ng-bind-html="item.Body"></span>
+    </p>
+</div>-->
 

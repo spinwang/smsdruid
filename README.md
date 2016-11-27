@@ -24,6 +24,8 @@ go to /#/numbers is there is a user
 ## Todo: 
 
 * remove the serviceAccount.json from the entire git history
+* make table update more efficient (currently every table is re-rendered every
+time there is a child_added event)
 * add support for phone call
 * Put ngrok in docker
 * Start ngrok by default

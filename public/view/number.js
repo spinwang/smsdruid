@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('smsdruid.numbers', ['ngRoute'])
+angular.module('smsdruid.numbers', ['ngRoute',"ngTable","ngSanitize"])
 
     .config(['$routeProvider', function ($routeProvider) {
         $routeProvider.when('/numbers', {
@@ -9,14 +9,16 @@ angular.module('smsdruid.numbers', ['ngRoute'])
             controllerAs: 'ctrl'
         });
     }])
-    .controller('NumberCtrl', ['$scope', function ($scope) {
+    .controller('NumberCtrl', ['$scope','NgTableParams',function ($scope,NgTableParams) {
 
         var self = this;
+        var limit = 10; // only display the last 10 msg
         self.numbers = {};
         self.msgs = [];
 
 
-        // todo: hide the credential
+        // it's OK to have the web api key here, as long as you lock the database access
+        // using rules. https://www.firebase.com/docs/security/quickstart.html
         var config = {
             apiKey: "AIzaSyDVAzFNruUePIDKWACy5Acbsok4Cklrx9A",
             authDomain: "smsdruid-590fa.firebaseapp.com",
@@ -26,7 +28,7 @@ angular.module('smsdruid.numbers', ['ngRoute'])
         firebase.initializeApp(config); // Initialize Firebase
         var database = firebase.database();
         var numbersRef = database.ref('/numbers');
-        var msgsRef = database.ref('/msgs').limitToLast(10);
+        var msgsRef = database.ref('/msgs').limitToLast(limit);
 
         self.signOut = function () {
             firebase.auth().signOut();
@@ -47,6 +49,11 @@ angular.module('smsdruid.numbers', ['ngRoute'])
             $scope.$apply();
         });
 
+        msgsRef.once('value').then(function(snapshot){
+            console.log(snapshot.val());
+            // create the table
+        });
+
         // show all the messages
         msgsRef.on('child_added', function (snapshot) {
             var value = snapshot.val();
@@ -57,6 +64,10 @@ angular.module('smsdruid.numbers', ['ngRoute'])
                 value.Body = msg_body;
             }
             self.msgs.unshift(value); // add the new msg to the top
+            // todo: this is currently inefficient, since it will be call multiple times.
+            // todo: use once('value')
+            // todo: http://ng-table.com/#/loading/demo-lazy-loaded
+            self.tableParams = new NgTableParams({}, { dataset: self.msgs});
             $scope.$apply();
         })
     }])
